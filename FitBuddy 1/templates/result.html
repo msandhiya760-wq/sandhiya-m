@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Personalized Workout Plan – FitBuddy</title>
+    <!-- Google Fonts: Roboto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.9)),
+                        url('/static/images/gym-bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            padding: 40px 20px;
+            color: #1e293b;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 820px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+            padding: 36px 32px;
+            animation: fadeIn 0.4s ease-out;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .header h1 {
+            font-size: 1.85rem;
+            color: #0f172a;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background-color: #ecfdf5;
+            border: 1.5px solid #10b981;
+            color: #065f46;
+            padding: 14px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+        }
+
+        .section-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px 22px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px 18px;
+        }
+
+        .info-item {
+            font-size: 0.92rem;
+            color: #475569;
+        }
+
+        .info-item strong {
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .badge-intensity {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-high { background: #fee2e2; color: #b91c1c; }
+        .badge-medium { background: #fef3c7; color: #b45309; }
+        .badge-low { background: #e0f2fe; color: #0369a1; }
+
+        .workout-box {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        .workout-content {
+            font-family: 'Roboto', monospace, sans-serif;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.68;
+            font-size: 0.93rem;
+            color: #1e293b;
+        }
+
+        .nutrition-box {
+            background: #fffbeb;
+            border-left: 5px solid #f59e0b;
+            border-radius: 10px;
+            padding: 20px 22px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
+        }
+
+        .nutrition-box h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nutrition-tip-text {
+            color: #78350f;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .feedback-box {
+            background: #f8fafc;
+            border: 1.5px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+
+        .feedback-box h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .feedback-box p {
+            font-size: 0.88rem;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 0.92rem;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            background-color: #ffffff;
+            color: #0f172a;
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 14px;
+        }
+
+        .form-control:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 85px;
+        }
+
+        .btn-feedback {
+            width: 100%;
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 13px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-feedback:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .actions-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 11px 20px;
+            background: #f1f5f9;
+            color: #334155;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.92rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .spinner {
+            display: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Popup Modal for API Key Alert */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-box {
+            background: #ffffff;
+            width: 90%;
+            max-width: 440px;
+            border-radius: 14px;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+            line-height: 1;
+        }
+
+        .modal-box h3 {
+            font-size: 1.35rem;
+            color: #dc2626;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .modal-box p {
+            font-size: 0.92rem;
+            color: #475569;
+            line-height: 1.55;
+            margin-bottom: 20px;
+        }
+
+        .modal-box code {
+            background: #f1f5f9;
+            color: #0f172a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.88rem;
+        }
+
+        .btn-modal {
+            background: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 11px 24px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-modal:hover {
+            background: #1d4ed8;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 24px 18px;
+            }
+            .user-info-grid {
+                grid-template-columns: 1fr;
+            }
+            .actions-row {
+                flex-direction: column;
+            }
+            .btn-secondary {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏋️ Your Personalized Workout Plan</h1>
+        </div>
+
+        <!-- Optional Confirmation Message -->
+        {% if updated_message %}
+        <div class="alert-success">
+            <span>✅</span> {{ updated_message }}
+        </div>
+        {% endif %}
+
+        <!-- User Information Section -->
+        <div class="section-card">
+            <h2 class="section-title">User Information</h2>
+            <div class="user-info-grid">
+                <div class="info-item"><strong>Name:</strong> {{ username }}</div>
+                <div class="info-item"><strong>User ID:</strong> {{ user_id }}</div>
+                <div class="info-item"><strong>Age:</strong> {{ age }}</div>
+                <div class="info-item"><strong>Weight:</strong> {{ weight }} kg</div>
+                <div class="info-item"><strong>Goal:</strong> {{ goal }}</div>
+                <div class="info-item">
+                    <strong>Intensity:</strong> 
+                    <span class="badge-intensity {% if intensity|lower == 'high' %}badge-high{% elif intensity|lower == 'medium' %}badge-medium{% else %}badge-low{% endif %}">
+                        {{ intensity }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workout Plan Section -->
+        <div class="workout-box">
+            <h2 class="section-title">Workout Plan</h2>
+            <pre class="workout-content">{{ workout_plan }}</pre>
+        </div>
+
+        <!-- Nutrition Tip Section -->
+        <div class="nutrition-box">
+            <h3>💡 Nutrition Tip</h3>
+            <p class="nutrition-tip-text">{{ nutrition_tip }}</p>
+        </div>
+
+        <!-- Feedback Section -->
+        <div class="feedback-box">
+            <h3>📝 Share Your Feedback</h3>
+            <p>Personalize and refine your fitness journey by submitting feedback on your current workout plan.</p>
+            <form action="/submit-feedback" method="POST" id="feedbackForm" onsubmit="return handleFeedbackSubmit(event)">
+                <label for="feedback_user_id" style="display:block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: #334155;">
+                    Your Unique User ID:
+                </label>
+                <input type="number" id="feedback_user_id" name="user_id" value="{{ user_id }}" class="form-control" placeholder="Enter your User ID" required>
+
+                <label for="feedback" style="display:block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: #334155;">
+                    Your Feedback:
+                </label>
+                <textarea id="feedback" name="feedback" class="form-control" placeholder="Let us know how we can improve your plan... (e.g. 'Add 15 mins yoga', 'Include more cardio', 'More rest days')" required></textarea>
+
+                <button type="submit" class="btn-feedback" id="feedbackSubmitBtn">
+                    <span class="spinner" id="feedbackSpinner"></span>
+                    <span id="feedbackBtnText">Submit Feedback</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="actions-row">
+            <a href="/" class="btn-secondary">⬅️ Create Another Plan</a>
+            <a href="/view-all-users" class="btn-secondary">👥 View All Users (Admin)</a>
+        </div>
+    </div>
+
+    <!-- API Key Popup Modal -->
+    <div id="apiKeyModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-icon">⚠️</div>
+            <h3>API Key Not Found</h3>
+            <p>Google Gemini API Key is missing.<br>Please set your <code>GOOGLE_API_KEY</code> in the <code>.env</code> file before updating your workout plan.</p>
+            <button type="button" class="btn-modal" onclick="closeApiKeyModal()">OK, Got It</button>
+        </div>
+    </div>
+
+    <script>
+        const initialHasApiKey = {{ 'true' if has_api_key else 'false' }};
+
+        function showApiKeyPopup() {
+            const modal = document.getElementById('apiKeyModal');
+            if (modal) {
+                modal.style.display = 'flex';
+            } else {
+                alert("⚠️ API Key Not Found!\n\nPlease set your GOOGLE_API_KEY in the .env file before submitting feedback.");
+            }
+        }
+
+        function closeApiKeyModal() {
+            const modal = document.getElementById('apiKeyModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        async function handleFeedbackSubmit(event) {
+            try {
+                const response = await fetch('/api/check-api-key');
+                const result = await response.json();
+                if (!result.configured) {
+                    event.preventDefault();
+                    showApiKeyPopup();
+                    return false;
+                }
+            } catch (err) {
+                if (!initialHasApiKey) {
+                    event.preventDefault();
+                    showApiKeyPopup();
+                    return false;
+                }
+            }
+
+            const btn = document.getElementById('feedbackSubmitBtn');
+            const spinner = document.getElementById('feedbackSpinner');
+            const btnText = document.getElementById('feedbackBtnText');
+            spinner.style.display = 'inline-block';
+            btnText.textContent = 'Updating Plan with Gemini AI...';
+            btn.style.opacity = '0.85';
+            btn.style.pointerEvents = 'none';
+            return true;
+        }
+    </script>
+</body>
+</html>
